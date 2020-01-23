@@ -5,8 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pojo.carlist.CarListResponce;
 
-import static helpers.APIHelper.responseSpecEqualsMessage;
+import static api.APIHelper.assertResponseMessage;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TestGetCarWhenAllCarRented extends TestBaseAPI {
 
@@ -39,7 +40,7 @@ public class TestGetCarWhenAllCarRented extends TestBaseAPI {
                 .when()
                 .get(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(ResponseMessages.ERROR_NO_FREE_CAR_AVAILABLE));
+                .spec(assertResponseMessage(equalTo(ResponseMessages.ERROR_NO_FREE_CAR_AVAILABLE)));
     }
 
     @AfterEach

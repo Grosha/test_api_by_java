@@ -2,7 +2,6 @@ import api.EndPoints;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 
@@ -17,10 +16,5 @@ public class TestBaseAPI {
                 .log(LogDetail.URI)
                 .build();
 
-    }
-
-    @AfterAll
-    public void after() {
-        System.out.println("after");
     }
 }

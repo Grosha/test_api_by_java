@@ -12,9 +12,10 @@ import pojo.car.Message;
 import java.util.Random;
 import java.util.stream.Stream;
 
-import static helpers.APIHelper.*;
+import static api.APIHelper.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.startsWithIgnoringCase;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TestAddNewCar extends TestBaseAPI {
 
@@ -29,7 +30,7 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(ResponseMessages.NEW_CAR_ADDED));
+                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
     }
 
     @Test
@@ -42,9 +43,10 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .log().body()
-                .statusCode(200)
-                .body("message", startsWithIgnoringCase("Car presence in the list:"));
+                .spec(assertResponseMessage(startsWithIgnoringCase("Car presence in the list:")));
+//                .log().body()
+//                .statusCode(200)
+//                .body("message", startsWithIgnoringCase("Car presence in the list:"));
     }
 
     private static Stream<Arguments> carObjects() {
@@ -68,7 +70,7 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(message));
+                .spec(assertResponseMessage(equalTo(message)));
     }
 
     @Test
@@ -82,7 +84,7 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(ResponseMessages.NEW_CAR_ADDED));
+                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
 
         // get just added car
         Car car = given()
@@ -117,7 +119,7 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .delete(EndPoints.deleteCar, newModel)
                 .then()
-                .spec(responseSpecEqualsMessage(deleteCarMessage));
+                .spec(assertResponseMessage(equalTo(deleteCarMessage)));
 
 
         // get removed car
@@ -127,6 +129,6 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .get(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(getAbsentCarMessage));
+                .spec(assertResponseMessage(equalTo(getAbsentCarMessage)));
     }
 }

@@ -1,4 +1,4 @@
-package helpers;
+package api;
 
 import api.EndPoints;
 import io.restassured.builder.RequestSpecBuilder;
@@ -6,6 +6,7 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.hamcrest.Matcher;
 import pojo.car.Car;
 import pojo.car.Message;
 
@@ -22,12 +23,12 @@ public class APIHelper {
                 .build();
     }
 
-    public static ResponseSpecification responseSpecEqualsMessage(String message) {
+    public static ResponseSpecification assertResponseMessage(Matcher<?> matcher) {
 
         return new ResponseSpecBuilder()
                 .log(LogDetail.BODY)
                 .expectStatusCode(200)
-                .expectBody("message", equalTo(message))
+                .expectBody("message", matcher)
                 .build();
     }
 

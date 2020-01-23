@@ -7,9 +7,10 @@ import pojo.car.Message;
 
 import java.util.Random;
 
-import static helpers.APIHelper.requestSpecWithBody;
-import static helpers.APIHelper.responseSpecEqualsMessage;
+import static api.APIHelper.requestSpecWithBody;
+import static api.APIHelper.assertResponseMessage;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TestUpdateCar extends TestBaseAPI {
     private Car newCar = null;
@@ -25,7 +26,7 @@ public class TestUpdateCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(ResponseMessages.NEW_CAR_ADDED));
+                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
     }
 
     @AfterEach
@@ -99,7 +100,7 @@ public class TestUpdateCar extends TestBaseAPI {
                 .when()
                 .patch(EndPoints.updateCar, "NoExistCar")
                 .then()
-                .spec(responseSpecEqualsMessage(ResponseMessages.ERROR_CAR_ABSENT_IN_THE_LIST));
+                .spec(assertResponseMessage(equalTo(ResponseMessages.ERROR_CAR_ABSENT_IN_THE_LIST)));
     }
 
     @Test

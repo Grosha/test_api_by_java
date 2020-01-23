@@ -1,7 +1,5 @@
 import api.EndPoints;
 import api.ResponseMessages;
-import helpers.RegexHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,9 +9,10 @@ import pojo.car.Message;
 
 import java.util.stream.Stream;
 
-import static helpers.APIHelper.responseSpecEqualsMessage;
+import static api.APIHelper.assertResponseMessage;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class TestGetCar extends TestBaseAPI {
@@ -33,7 +32,7 @@ public class TestGetCar extends TestBaseAPI {
                 .when()
                 .get(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(message));
+                .spec(assertResponseMessage(equalTo(message)));
     }
 
     private static Stream<Arguments> carParameters() {
@@ -53,7 +52,7 @@ public class TestGetCar extends TestBaseAPI {
                 .when()
                 .get(EndPoints.car)
                 .then()
-                .spec(responseSpecEqualsMessage(message));
+                .spec(assertResponseMessage(equalTo(message)));
     }
 
     @Test
@@ -77,11 +76,6 @@ public class TestGetCar extends TestBaseAPI {
         assertThat("Incorrect parameter name in car", car.getName(), matchesPattern("\\w+"));
         assertThat("Incorrect parameter type in car", car.getType(), matchesPattern("\\w+"));
         assertThat("Incorrect parameter status in car", car.getStatus().toString(), matchesPattern("\\d+"));
-
-//        Assertions.assertTrue(RegexHelper.matchExpression(car.getModel(), "\\w+"), "Incorrect parameter model in car");
-//        Assertions.assertTrue(RegexHelper.matchExpression(car.getName(), "\\w+"), "Incorrect parameter name in car");
-//        Assertions.assertTrue(RegexHelper.matchExpression(car.getType(), "\\w+"), "Incorrect parameter type in car");
-//        Assertions.assertTrue(RegexHelper.matchExpression(car.getStatus().toString(), "\\w+"), "Incorrect parameter status in car");
     }
 
     @Test
@@ -96,6 +90,6 @@ public class TestGetCar extends TestBaseAPI {
                 .body()
                 .as(Message.class).getMessage();
 
-        Assertions.assertTrue(RegexHelper.matchExpression(car.getModel(), "\\d+"), "Incorrect parameter model in car");
+        assertThat("Incorrect parameter model in car", car.getModel(), matchesPattern("\\d+"));
     }
 }
