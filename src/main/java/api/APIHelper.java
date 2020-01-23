@@ -43,16 +43,4 @@ public class APIHelper {
 //                .body()
 //                .as(Message.class).getMessage();
 //    }
-
-        public static Car updateCarWith(String paramName, String paramValue, Car car) {
-        return given()
-                .param(paramName, paramValue)
-                .when()
-                .patch(EndPoints.updateCar, car.getModel())
-                .then()
-                .log().body()
-                .extract()
-                .body()
-                .as(Message.class).getMessage();
-    }
 }
