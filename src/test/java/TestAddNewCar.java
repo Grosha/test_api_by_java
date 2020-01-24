@@ -1,21 +1,21 @@
+import api.APIHelper;
 import api.EndPoints;
 import api.ResponseMessages;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import pojo.car.Car;
-import pojo.car.Message;
 
 import java.util.Random;
 import java.util.stream.Stream;
 
 import static api.APIHelper.*;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.startsWithIgnoringCase;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestAddNewCar extends TestBaseAPI {
 
@@ -25,12 +25,7 @@ public class TestAddNewCar extends TestBaseAPI {
         String model = "Accord_v" + new Random().nextInt(10000);
         Car newCar = new Car(model, "Honda", 1, "Sedan");
 
-        given()
-                .spec(requestSpecWithBody(new Gson().toJson(newCar)))
-                .when()
-                .post(EndPoints.car)
-                .then()
-                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
+        APIHelper.requestAddNewCar(newCar);
     }
 
     @Test
@@ -43,10 +38,7 @@ public class TestAddNewCar extends TestBaseAPI {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(assertResponseMessage(startsWithIgnoringCase("Car presence in the list:")));
-//                .log().body()
-//                .statusCode(200)
-//                .body("message", startsWithIgnoringCase("Car presence in the list:"));
+                .spec(assertResponseMessage(startsWith("Car presence in the list:")));
     }
 
     private static Stream<Arguments> carObjects() {
@@ -75,52 +67,22 @@ public class TestAddNewCar extends TestBaseAPI {
 
     @Test
     void testSmokeSuite() {
-
         Car newCar = new Car("Huracan", "Lamborghiniv", 1, "Sportcar");
 
         // add new car
-        given()
-                .spec(requestSpecWithBody(new Gson().toJson(newCar)))
-                .when()
-                .post(EndPoints.car)
-                .then()
-                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
+        APIHelper.requestAddNewCar(newCar);
 
         // get just added car
-        Car car = given()
-                .param("model", newCar.getModel())
-                .when()
-                .get(EndPoints.car)
-                .then()
-                .log().body()
-                .extract()
-                .body()
-                .as(Message.class).getMessage();
-
-        Assertions.assertEquals(newCar, car, "Information about just added car not equals information, which was sent");
+        Car car = APIHelper.requestGetCar("model", newCar.getModel());
+        assertEquals(newCar, car, "Information about just added car not equals information, which was sent");
 
         // update car
         String newModel = "Test" + newCar.getModel();
-        Car updatedCar = given()
-                .param("model", newModel)
-                .when()
-                .patch(EndPoints.updateCar, newCar.getModel())
-                .then()
-                .log().body()
-                .extract()
-                .body()
-                .as(Message.class).getMessage();
-
-        Assertions.assertEquals(updatedCar.getModel(), newModel, "Information about just added car not equals information, which was sent");
+        Car updatedCar = APIHelper.requestGetUpdatedCarWith("model", newModel, newCar);
+        assertEquals(updatedCar.getModel(), newModel, "Information about just added car not equals information, which was sent");
 
         // remove just added/updated car
-        String deleteCarMessage = String.format("Car model %s removed", newModel);
-        given()
-                .when()
-                .delete(EndPoints.deleteCar, newModel)
-                .then()
-                .spec(assertResponseMessage(equalTo(deleteCarMessage)));
-
+        APIHelper.requestDeleteCarModel(newModel);
 
         // get removed car
         String getAbsentCarMessage = String.format("Car model %s is absent in the list", newModel);

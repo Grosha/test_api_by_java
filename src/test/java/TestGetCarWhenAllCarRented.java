@@ -1,3 +1,4 @@
+import api.APIHelper;
 import api.EndPoints;
 import api.ResponseMessages;
 import org.junit.jupiter.api.AfterEach;
@@ -15,22 +16,9 @@ public class TestGetCarWhenAllCarRented extends TestBaseAPI {
 
     @BeforeEach
     void rentAllCar() {
-        carListResponce = given()
-                .when()
-                .get(EndPoints.carList)
-                .then()
-                .log().body()
-                .extract()
-                .body()
-                .as(CarListResponce.class);
-
-        carListResponce.getMessage().forEach(car -> given()
-                .param("status", 0)
-                .when()
-                .patch(EndPoints.updateCar, car.getModel())
-                .then()
-                .log().body()
-                .statusCode(200));
+        carListResponce = APIHelper.requestGetCarList();
+        carListResponce.getMessage()
+                .forEach(car -> APIHelper.requestUpdateCarWith("status", "0", car.getModel()));
     }
 
     @Test
@@ -45,12 +33,7 @@ public class TestGetCarWhenAllCarRented extends TestBaseAPI {
 
     @AfterEach
     void returnAllCar() {
-        carListResponce.getMessage().forEach(car -> given()
-                .param("status", 1)
-                .when()
-                .patch(EndPoints.updateCar, car.getModel())
-                .then()
-                .log().body()
-                .statusCode(200));
+        carListResponce.getMessage()
+                .forEach(car -> APIHelper.requestUpdateCarWith("status", "1", car.getModel()));
     }
 }
