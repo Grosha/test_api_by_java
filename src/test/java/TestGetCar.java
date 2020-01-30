@@ -1,6 +1,5 @@
 import api.APIHelper;
 import api.EndPoints;
-import api.ResponseMessages;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,6 +9,7 @@ import pojo.car.Car;
 import java.util.stream.Stream;
 
 import static api.APIHelper.assertResponseMessage;
+import static api.ResponseMessages.ERROR_INCORRECT_PARAMETER;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -38,10 +38,10 @@ public class TestGetCar extends TestBaseAPI {
 
     private static Stream<Arguments> carParameters() {
         return Stream.of(
-                Arguments.of("name", "Honda", ResponseMessages.ERROR_INCORRECT_PARAMETER),
-                Arguments.of("status", "1", ResponseMessages.ERROR_INCORRECT_PARAMETER),
-                Arguments.of("type", "Sedan", ResponseMessages.ERROR_INCORRECT_PARAMETER),
-                Arguments.of("test", "test", ResponseMessages.ERROR_INCORRECT_PARAMETER)
+                Arguments.of("name", "Honda", ERROR_INCORRECT_PARAMETER),
+                Arguments.of("status", "1", ERROR_INCORRECT_PARAMETER),
+                Arguments.of("type", "Sedan", ERROR_INCORRECT_PARAMETER),
+                Arguments.of("test", "test", ERROR_INCORRECT_PARAMETER)
         );
     }
 

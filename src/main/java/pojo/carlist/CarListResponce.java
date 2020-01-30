@@ -24,12 +24,16 @@ public class CarListResponce {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("message", message).toString();
+        return new ToStringBuilder(this)
+                .append("message", message)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).toHashCode();
+        return new HashCodeBuilder()
+                .append(message)
+                .toHashCode();
     }
 
     @Override
@@ -41,7 +45,9 @@ public class CarListResponce {
             return false;
         }
         CarListResponce rhs = ((CarListResponce) other);
-        return new EqualsBuilder().append(message, rhs.message).isEquals();
+        return new EqualsBuilder()
+                .append(message, rhs.message)
+                .isEquals();
     }
 
 }

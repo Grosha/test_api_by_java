@@ -23,12 +23,16 @@ public class Message {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("message", message).toString();
+        return new ToStringBuilder(this)
+                .append("message", message)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).toHashCode();
+        return new HashCodeBuilder()
+                .append(message)
+                .toHashCode();
     }
 
     @Override
@@ -40,7 +44,9 @@ public class Message {
             return false;
         }
         Message rhs = ((Message) other);
-        return new EqualsBuilder().append(message, rhs.message).isEquals();
+        return new EqualsBuilder()
+                .append(message, rhs.message)
+                .isEquals();
     }
 
 }

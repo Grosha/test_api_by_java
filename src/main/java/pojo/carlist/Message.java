@@ -56,12 +56,22 @@ public class Message {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("model", model).append("name", name).append("status", status).append("type", type).toString();
+        return new ToStringBuilder(this)
+                .append("model", model)
+                .append("name", name)
+                .append("status", status)
+                .append("type", type)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(model).append(type).append(status).toHashCode();
+        return new HashCodeBuilder()
+                .append(name)
+                .append(model)
+                .append(type)
+                .append(status)
+                .toHashCode();
     }
 
     @Override
@@ -73,7 +83,12 @@ public class Message {
             return false;
         }
         Message rhs = ((Message) other);
-        return new EqualsBuilder().append(name, rhs.name).append(model, rhs.model).append(type, rhs.type).append(status, rhs.status).isEquals();
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .append(model, rhs.model)
+                .append(type, rhs.type)
+                .append(status, rhs.status)
+                .isEquals();
     }
 
 }

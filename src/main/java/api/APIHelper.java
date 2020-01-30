@@ -11,6 +11,7 @@ import pojo.car.Car;
 import pojo.car.Message;
 import pojo.carlist.CarListResponce;
 
+import static api.ResponseMessages.NEW_CAR_ADDED;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -115,6 +116,6 @@ public class APIHelper {
                 .when()
                 .post(EndPoints.car)
                 .then()
-                .spec(assertResponseMessage(equalTo(ResponseMessages.NEW_CAR_ADDED)));
+                .spec(assertResponseMessage(equalTo(NEW_CAR_ADDED)));
     }
 }

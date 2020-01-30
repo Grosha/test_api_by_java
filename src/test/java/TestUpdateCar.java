@@ -1,12 +1,12 @@
 import api.APIHelper;
 import api.EndPoints;
-import api.ResponseMessages;
 import org.junit.jupiter.api.*;
 import pojo.car.Car;
 
 import java.util.Random;
 
 import static api.APIHelper.assertResponseMessage;
+import static api.ResponseMessages.ERROR_CAR_ABSENT_IN_THE_LIST;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +59,7 @@ public class TestUpdateCar extends TestBaseAPI {
                 .when()
                 .patch(EndPoints.updateCar, "NoExistCar")
                 .then()
-                .spec(assertResponseMessage(equalTo(ResponseMessages.ERROR_CAR_ABSENT_IN_THE_LIST)));
+                .spec(assertResponseMessage(equalTo(ERROR_CAR_ABSENT_IN_THE_LIST)));
     }
 
     @Test
